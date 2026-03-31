@@ -156,7 +156,7 @@ export default function SurveyPage() {
       setSubmitError('')
       setCurrentStep(prev => Math.min(prev + 1, totalSteps - 1))
     } else {
-      setSubmitError('Please fill in all required fields')
+      setSubmitError('Vul alsjeblieft alle verplichte velden in')
     }
   }
 
@@ -167,7 +167,7 @@ export default function SurveyPage() {
 
   const handleSubmit = async () => {
     if (!canProceedToNext()) {
-      setSubmitError('Please fill in all required fields')
+      setSubmitError('Vul alsjeblieft alle verplichte velden in')
       return
     }
 
@@ -202,7 +202,7 @@ export default function SurveyPage() {
 
       if (!response.ok) {
         const error = await response.json()
-        setSubmitError(error.message || 'Submission failed. Please try again.')
+        setSubmitError(error.error || error.message || 'Verzending mislukt. Probeer het opnieuw.')
         setIsSubmitting(false)
         return
       }
@@ -210,7 +210,7 @@ export default function SurveyPage() {
       // Success - redirect to thank you page
       router.push('/bedankt')
     } catch (error) {
-      setSubmitError('An error occurred. Please try again.')
+      setSubmitError('Er is een fout opgetreden. Probeer het opnieuw.')
       setIsSubmitting(false)
     }
   }
@@ -297,7 +297,7 @@ export default function SurveyPage() {
                   style={{ backgroundColor: '#E31E24' }}
                 />
                 <h2 className="text-xl font-semibold" style={{ color: '#1a1a2e' }}>
-                  Section 1 — Quick start
+                  Deel 1 — Snel begin
                 </h2>
               </div>
 
@@ -340,7 +340,7 @@ export default function SurveyPage() {
                   style={{ backgroundColor: '#2B3990' }}
                 />
                 <h2 className="text-xl font-semibold" style={{ color: '#1a1a2e' }}>
-                  Section 2 — Your Rubroek
+                  Deel 2 — Jouw Rubroek
                 </h2>
               </div>
 
@@ -415,7 +415,7 @@ export default function SurveyPage() {
                   style={{ backgroundColor: '#8DC63F' }}
                 />
                 <h2 className="text-xl font-semibold" style={{ color: '#1a1a2e' }}>
-                  Section 3 — Contact
+                  Deel 3 — Contact
                 </h2>
               </div>
 
@@ -475,7 +475,7 @@ export default function SurveyPage() {
                   style={{ backgroundColor: '#E31E24' }}
                 />
                 <h2 className="text-xl font-semibold" style={{ color: '#1a1a2e' }}>
-                  Section 4 — New place
+                  Deel 4 — Nieuwe plek
                 </h2>
               </div>
 
@@ -536,7 +536,7 @@ export default function SurveyPage() {
                   style={{ backgroundColor: '#2B3990' }}
                 />
                 <h2 className="text-xl font-semibold" style={{ color: '#1a1a2e' }}>
-                  Section 5 — What matters
+                  Deel 5 — Wat telt
                 </h2>
               </div>
 
@@ -623,7 +623,7 @@ export default function SurveyPage() {
                   style={{ backgroundColor: '#8DC63F' }}
                 />
                 <h2 className="text-xl font-semibold" style={{ color: '#1a1a2e' }}>
-                  Section 6 — Participation
+                  Deel 6 — Meedoen
                 </h2>
               </div>
 
@@ -685,7 +685,7 @@ export default function SurveyPage() {
                   style={{ backgroundColor: '#E31E24' }}
                 />
                 <h2 className="text-xl font-semibold" style={{ color: '#1a1a2e' }}>
-                  Section 7 — Final
+                  Deel 7 — Afsluiting
                 </h2>
               </div>
 
@@ -718,7 +718,7 @@ export default function SurveyPage() {
                   style={{ backgroundColor: '#2B3990' }}
                 />
                 <h2 className="text-xl font-semibold" style={{ color: '#1a1a2e' }}>
-                  Profile & Submit
+                  Profiel & Versturen
                 </h2>
               </div>
 
