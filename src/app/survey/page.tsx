@@ -48,6 +48,8 @@ const initialFormData: FormData = {
   honeypot: '',
 }
 
+const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
 export default function SurveyPage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
@@ -58,8 +60,9 @@ export default function SurveyPage() {
 
   const totalSteps = 8
 
-  // Load Turnstile script
+  // Load Turnstile script (skip in demo mode)
   useEffect(() => {
+    if (isDemoMode) return
     if (!window.turnstile) {
       const script = document.createElement('script')
       script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
@@ -171,6 +174,12 @@ export default function SurveyPage() {
     setIsSubmitting(true)
     setSubmitError('')
 
+    // In demo mode, skip the API call and redirect directly to the thank-you page
+    if (isDemoMode) {
+      router.push('/bedankt')
+      return
+    }
+
     try {
       // Get Turnstile token
       let token = ''
@@ -210,6 +219,16 @@ export default function SurveyPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FAFAFA' }}>
+      {/* Demo mode banner */}
+      {isDemoMode && (
+        <div
+          className="text-center py-2 px-4 text-sm font-medium"
+          style={{ backgroundColor: '#FFF3CD', color: '#856404', borderBottom: '1px solid #FFEEBA' }}
+        >
+          🔍 Preview-modus — antwoorden worden niet opgeslagen
+        </div>
+      )}
+
       {/* Header with back link */}
       <div className="p-4 border-b" style={{ borderColor: '#e0e0e0' }}>
         <Link
@@ -819,13 +838,22 @@ export default function SurveyPage() {
               />
 
               {/* Turnstile widget */}
-              {turnstileLoaded && (
-                <div className="mb-6">
-                  <div
-                    className="cf-turnstile"
-                    data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-                  />
+              {isDemoMode ? (
+                <div
+                  className="mb-6 p-4 rounded text-sm text-center"
+                  style={{ backgroundColor: '#FFF3CD', color: '#856404', border: '1px dashed #FFEEBA' }}
+                >
+                  🔍 Preview-modus: CAPTCHA overgeslagen
                 </div>
+              ) : (
+                turnstileLoaded && (
+                  <div className="mb-6">
+                    <div
+                      className="cf-turnstile"
+                      data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                    />
+                  </div>
+                )
               )}
             </div>
           )}
