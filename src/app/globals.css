@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@theme {
+  --color-pulse-red: #E31E24;
+  --color-pulse-blue: #2B3990;
+  --color-pulse-green: #8DC63F;
+  --color-pulse-dark: #0f1117;
+  --color-pulse-text: #1a1a2e;
+  --color-pulse-text-light: #555555;
+  --color-pulse-warm: #FAE8E8;
+  --color-pulse-light: #FAFAFA;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-pulse-text);
+    background-color: var(--color-pulse-light);
+  }
+
+  ::selection {
+    background-color: rgba(227, 30, 36, 0.15);
+  }
+}
+
+@layer components {
+  .card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #E31E24, #c41920);
+    color: white;
+    border-radius: 12px;
+    padding: 14px 32px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(227, 30, 36, 0.25);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(227, 30, 36, 0.35);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: #1a1a2e;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 14px 32px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: #E31E24;
+    color: #E31E24;
+    background: rgba(227, 30, 36, 0.04);
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #E31E24, #8DC63F);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .survey-option {
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.06);
+    border-radius: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .survey-option:hover {
+    border-color: rgba(227, 30, 36, 0.3);
+    background: rgba(227, 30, 36, 0.02);
+  }
+
+  .survey-option.selected {
+    border-color: #E31E24;
+    background: rgba(227, 30, 36, 0.06);
+    box-shadow: 0 0 0 1px #E31E24;
+  }
+
+  .survey-input {
+    width: 100%;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: white;
+  }
+
+  .survey-input:focus {
+    outline: none;
+    border-color: #E31E24;
+    box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1);
+  }
+
+  .fade-in {
+    animation: fadeIn 0.4s ease forwards;
+  }
+
+  .slide-up {
+    animation: slideUp 0.4s ease forwards;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
