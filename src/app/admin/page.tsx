@@ -73,7 +73,6 @@ export default function AdminDashboardPage() {
   const [search, setSearch] = useState('')
 
   const fetchResponses = useCallback(async () => {
-    setLoading(true)
     const params = new URLSearchParams()
     if (dateFrom) params.append('dateFrom', dateFrom)
     if (dateTo) params.append('dateTo', dateTo)
@@ -92,7 +91,11 @@ export default function AdminDashboardPage() {
   }, [dateFrom, dateTo, ageGroup, livesInRubroek, search, router])
 
   useEffect(() => {
-    fetchResponses()
+    const timeoutId = window.setTimeout(() => {
+      void fetchResponses()
+    }, 0)
+
+    return () => window.clearTimeout(timeoutId)
   }, [fetchResponses])
 
   const handleLogout = async () => {

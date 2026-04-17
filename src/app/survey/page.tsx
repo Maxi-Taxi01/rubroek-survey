@@ -56,7 +56,9 @@ export default function SurveyPage() {
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
-  const [turnstileLoaded, setTurnstileLoaded] = useState(false)
+  const [turnstileLoaded, setTurnstileLoaded] = useState(
+    () => isDemoMode || (typeof window !== 'undefined' && !!window.turnstile)
+  )
 
   const totalSteps = 8
 
@@ -72,8 +74,6 @@ export default function SurveyPage() {
         setTurnstileLoaded(true)
       }
       document.head.appendChild(script)
-    } else {
-      setTurnstileLoaded(true)
     }
   }, [])
 
@@ -209,7 +209,7 @@ export default function SurveyPage() {
 
       // Success - redirect to thank you page
       router.push('/bedankt')
-    } catch (error) {
+    } catch {
       setSubmitError('Er is een fout opgetreden. Probeer het opnieuw.')
       setIsSubmitting(false)
     }
@@ -922,9 +922,17 @@ export default function SurveyPage() {
 
 // Type definitions for Turnstile
 declare global {
+  interface TurnstileRenderOptions {
+    sitekey: string
+    callback?: (token: string) => void
+    'error-callback'?: () => void
+    theme?: 'light' | 'dark' | 'auto'
+    size?: 'normal' | 'flexible' | 'compact'
+  }
+
   interface Window {
     turnstile?: {
-      render?: (element: string | HTMLElement, options: any) => string
+      render?: (element: string | HTMLElement, options: TurnstileRenderOptions) => string
       reset?: (widgetId?: string) => void
       remove?: (widgetId?: string) => void
       getResponse?: (widgetId?: string) => string
