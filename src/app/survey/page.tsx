@@ -56,9 +56,7 @@ export default function SurveyPage() {
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
-  const [turnstileLoaded, setTurnstileLoaded] = useState(
-    () => isDemoMode || (typeof window !== 'undefined' && !!window.turnstile)
-  )
+  const [turnstileLoaded, setTurnstileLoaded] = useState(false)
 
   const totalSteps = 8
 
@@ -74,6 +72,9 @@ export default function SurveyPage() {
         setTurnstileLoaded(true)
       }
       document.head.appendChild(script)
+    } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTurnstileLoaded(true)
     }
   }, [])
 

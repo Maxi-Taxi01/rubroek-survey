@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
@@ -72,31 +72,41 @@ export default function AdminDashboardPage() {
   const [livesInRubroek, setLivesInRubroek] = useState('all')
   const [search, setSearch] = useState('')
 
-  const fetchResponses = useCallback(async () => {
-    const params = new URLSearchParams()
-    if (dateFrom) params.append('dateFrom', dateFrom)
-    if (dateTo) params.append('dateTo', dateTo)
-    if (ageGroup !== 'all') params.append('ageGroup', ageGroup)
-    if (livesInRubroek !== 'all') params.append('livesInRubroek', livesInRubroek)
-    if (search) params.append('search', search)
-
-    const res = await fetch(`/api/admin/responses?${params}`)
-    if (res.status === 401) {
-      router.push('/admin/login')
-      return
-    }
-    const result = await res.json()
-    setResponses(result.data || [])
-    setLoading(false)
-  }, [dateFrom, dateTo, ageGroup, livesInRubroek, search, router])
-
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      void fetchResponses()
-    }, 0)
+    let cancelled = false
 
-    return () => window.clearTimeout(timeoutId)
-  }, [fetchResponses])
+    const loadResponses = async () => {
+      try {
+        const params = new URLSearchParams()
+        if (dateFrom) params.append('dateFrom', dateFrom)
+        if (dateTo) params.append('dateTo', dateTo)
+        if (ageGroup !== 'all') params.append('ageGroup', ageGroup)
+        if (livesInRubroek !== 'all') params.append('livesInRubroek', livesInRubroek)
+        if (search) params.append('search', search)
+
+        const res = await fetch(`/api/admin/responses?${params}`)
+        if (cancelled) return
+        if (res.status === 401) {
+          router.push('/admin/login')
+          return
+        }
+
+        const result = await res.json()
+        if (cancelled) return
+        setResponses(result.data || [])
+      } catch {
+        if (cancelled) return
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    void loadResponses()
+
+    return () => {
+      cancelled = true
+    }
+  }, [dateFrom, dateTo, ageGroup, livesInRubroek, search, router])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
